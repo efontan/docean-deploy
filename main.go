@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Println("testing go app")
+	fmt.Println("starting go app")
 	testMessage := os.Getenv("TEST_MESSAGE")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
