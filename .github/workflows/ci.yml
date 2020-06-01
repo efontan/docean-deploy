@@ -57,6 +57,7 @@ jobs:
         username: ${{ secrets.DO_USERNAME }}
         password: ${{ secrets.DO_PASSWORD }}
         port: ${{ secrets.DO_PORT }}
+        timeout: 120s
 
         envs: GITHUB_USERNAME, GITHUB_TOKEN, TEST_MESSAGE
         script: |
