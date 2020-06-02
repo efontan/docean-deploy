@@ -1,6 +1,4 @@
 FROM golang:1.13 as builder
-ARG TEST_MESSAGE
-ENV TEST_MESSAGE=$TEST_MESSAGE
 COPY . /app
 WORKDIR /app
 RUN CGO_ENABLED=0 GOOS=linux GOPROXY=https://proxy.golang.org go build -o app main.go

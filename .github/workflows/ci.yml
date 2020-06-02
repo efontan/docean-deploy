@@ -29,7 +29,6 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
-
     - name: Build
       run: go build -v ./...
 
@@ -57,12 +56,11 @@ jobs:
         username: ${{ secrets.DO_USERNAME }}
         password: ${{ secrets.DO_PASSWORD }}
         port: ${{ secrets.DO_PORT }}
-        timeout: 120s
-        script_stop: true
-
         envs: GITHUB_USERNAME, GITHUB_TOKEN, TEST_MESSAGE
         script: |
-          docker stop \$(docker ps -a -q)
+          docker stop $(docker ps -a -q) || true
+          docker rm $(docker ps -a -q) || true
           docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-          docker pull docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
-          docker run -dit -p 9091:80 docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
+          docker pull docker.pkg.github.com/kenessajr/react-with-actions/react-with-actions:latest
+          docker run -dit -p 80:9091 --env TEST_MESSAGE="$TEST_MESSAGE" \
+          --name docean_deploy docean-deploy docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
