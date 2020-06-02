@@ -48,10 +48,12 @@ jobs:
     - name: Deploy image to DigitalOcean
       uses: appleboy/ssh-action@master
       env:
-          GITHUB_USERNAME: ${{ secrets.USERNAME_GITHUB }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TEST_MESSAGE: ${{ secrets.TEST_MESSAGE }}
+        GITHUB_USERNAME: ${{ secrets.USERNAME_GITHUB }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TEST_MESSAGE: ${{ secrets.TEST_MESSAGE }}
       with:
+        timeout: 120s
+        script_stop: true
         host: ${{ secrets.DO_HOST }}
         username: ${{ secrets.DO_USERNAME }}
         password: ${{ secrets.DO_PASSWORD }}
@@ -59,7 +61,6 @@ jobs:
         envs: GITHUB_USERNAME, GITHUB_TOKEN, TEST_MESSAGE
         script: |
           docker stop $(docker ps -a -q) || true
-          docker rm $(docker ps -a -q) || true
           docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
           docker pull docker.pkg.github.com/kenessajr/react-with-actions/react-with-actions:latest
           docker run -dit -p 80:9091 --env TEST_MESSAGE="$TEST_MESSAGE" \
