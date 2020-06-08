@@ -14,13 +14,13 @@ jobs:
     steps:
 
     - name: Set up Go 1.x
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@0f551ac
       with:
         go-version: ^1.13
       id: go
 
     - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
+      uses: actions/checkout@453ee27
 
     - name: Get dependencies
       run: |
@@ -36,7 +36,7 @@ jobs:
       run: go test -v ./...
     
     - name: Publish to Github Packages Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
+      uses: elgohr/Publish-Docker-Github-Action@5d8ac99
       with:
         name: efontan/docean-deploy/docean-deploy
         registry: docker.pkg.github.com
@@ -46,11 +46,12 @@ jobs:
         tags: latest
 
     - name: Deploy image to DigitalOcean
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@682eb0d
       env:
         GITHUB_USERNAME: ${{ secrets.USERNAME_GITHUB }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TEST_MESSAGE: ${{ secrets.TEST_MESSAGE }}
+        CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       with:
         timeout: 120s
         script_stop: true
@@ -58,10 +59,10 @@ jobs:
         username: ${{ secrets.DO_USERNAME }}
         password: ${{ secrets.DO_PASSWORD }}
         port: ${{ secrets.DO_PORT }}
-        envs: GITHUB_USERNAME, GITHUB_TOKEN, TEST_MESSAGE
+        envs: GITHUB_USERNAME, GITHUB_TOKEN, TEST_MESSAGE, CONTAINER_NAME
         script: |
-          docker stop docean_deploy || true
-          docker rm docean_deploy || true
+          docker stop $CONTAINER_NAME || true
+          docker rm $CONTAINER_NAME || true
           docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
           docker pull docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
-          docker run -dit -p 80:9091 -e TEST_MESSAGE="$TEST_MESSAGE" -e SOMETHING='something' --name docean_deploy docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
+          docker run -dit -p 80:9091 -e TEST_MESSAGE="$TEST_MESSAGE" -e SOMETHING='something' --name $CONTAINER_NAME docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
