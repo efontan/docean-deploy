@@ -60,7 +60,8 @@ jobs:
         port: ${{ secrets.DO_PORT }}
         envs: GITHUB_USERNAME, GITHUB_TOKEN, TEST_MESSAGE
         script: |
-          docker stop $(docker ps -a -q) || true
+          docker stop docean_deploy || true
+          docker rm docean_deploy || true
           docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
           docker pull docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
           docker run -dit -p 80:9091 -e TEST_MESSAGE="$TEST_MESSAGE" -e SOMETHING='something' --name docean_deploy docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
