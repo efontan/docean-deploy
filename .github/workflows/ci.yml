@@ -66,7 +66,7 @@ jobs:
         script_stop: true
         host: ${{ secrets.DO_HOST }}
         username: ${{ secrets.DO_USERNAME }}
-        password: ${{ secrets.DO_KEY }}
+        key: ${{ secrets.DO_KEY }}
         port: ${{ secrets.DO_PORT }}
         envs: GITHUB_USERNAME, GITHUB_TOKEN, TEST_MESSAGE, CONTAINER_NAME
         script: |
