@@ -74,4 +74,4 @@ jobs:
           docker rm $CONTAINER_NAME || true
           docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
           docker pull docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
-          docker run -dit -p 80:9091 -e TEST_MESSAGE="$TEST_MESSAGE" --name $CONTAINER_NAME docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
+          docker run -dit -p 8080:9091 -e TEST_MESSAGE="$TEST_MESSAGE" --name $CONTAINER_NAME docker.pkg.github.com/efontan/docean-deploy/docean-deploy:latest
