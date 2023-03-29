@@ -45,7 +45,7 @@ jobs:
       run: go test -v ./...
     
     - name: Publish to Github Packages Registry
-      uses: elgohr/Publish-Docker-Github-Action@5d8ac99
+      uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         name: efontan/docean-deploy/docean-deploy
         registry: docker.pkg.github.com
